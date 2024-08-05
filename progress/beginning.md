@@ -16,7 +16,9 @@ Understand key concepts such as registers, the stack, and basic instructions lik
 **2.Required Tools:**
 
 Make: Used to organize and automate the commands needed for compiling and linking all files.
+
 NASM (Netwide Assembler): The assembler used to produce .bin files.
+
 QEMU: The virtual machine software for running and testing the OS.
 
 **Installation Command:**
