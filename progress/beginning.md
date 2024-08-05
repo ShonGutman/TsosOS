@@ -1,23 +1,25 @@
-**----TSOS Project Log----**
+TSOS Project Log
+-----------------
 
-Platform: Linux Ubuntu
+**Platform:** Linux Ubuntu
 
-Objective:
+**Objective:**
 	To learn the fundamental concepts of operating systems and implement a basic OS, called TSOS, from scratch.
 
-**Requirements**
+Requirements
+------------
 
-1.Knowledge of Assembly Language:
+**1.Knowledge of Assembly Language:**
 
-	Understand key concepts such as registers, the stack, and basic instructions like `MOV` and `JMP`.
+Understand key concepts such as registers, the stack, and basic instructions like `MOV` and `JMP`.
 
-2.Required Tools:
+**2.Required Tools:**
 
-	Make: Used to organize and automate the commands needed for compiling and linking all files.
-	NASM (Netwide Assembler): The assembler used to produce .bin files.
-	QEMU: The virtual machine software for running and testing the OS.
+Make: Used to organize and automate the commands needed for compiling and linking all files.
+NASM (Netwide Assembler): The assembler used to produce .bin files.
+QEMU: The virtual machine software for running and testing the OS.
 
-Installation Command:
+**Installation Command:**
 	`sudo apt install make nasm qemu-system-x86`
 
 Tools Overview:
