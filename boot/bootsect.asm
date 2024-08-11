@@ -30,7 +30,7 @@ start:
     jmp $   ; Jump to the current address to create an infinite loop
 
 
-%include "print.asm"
+%include "boot/print.asm"
 
 MSG_REAL_MODE db "Started in 16-bit Real Mode", 0
 
