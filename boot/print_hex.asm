@@ -42,7 +42,7 @@ place_char:
 
 print_hex_done:
     ; Print the resulting hex string using the print function
-    mov bx, HEX_OUT      ; Load the address of HEX_OUT into BX
+    mov si, HEX_OUT      ; Load the address of HEX_OUT into BX
     call print           ; Call the print function to display the hex string
 
     popa                 ; Restore all registers from the stack
