@@ -31,6 +31,7 @@ start:
 
 
 %include "boot/print.asm"
+%include "boot/print_hex.asm"
 
 MSG_REAL_MODE db "Started in 16-bit Real Mode", 0
 
