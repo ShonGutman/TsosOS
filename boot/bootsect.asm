@@ -9,11 +9,12 @@ bits 16
 ; Infinite loop
 start:
 
-
     ; setup data segments
-    mov ax, 0  ; can't set ds/es directly
+    xor ax, ax  ; can't set ds/es directly
     mov ds, ax
     mov es, ax
+
+    mov [BOOT_DRIVE], dl ; Remember that the BIOS sets us the boot drive in 'dl' on boot
 
     ; setup stack
     mov ss, ax
@@ -21,7 +22,7 @@ start:
 
     mov sp, bp ; if the stack is empty then sp points to bp
 
-    ;print message to screen
+    ; print message to screen
     mov si, MSG_REAL_MODE
     call print
     call print_nl
@@ -32,7 +33,9 @@ start:
 
 %include "boot/print.asm"
 %include "boot/print_hex.asm"
+%include "boot/disk.asm"
 
+BOOT_DRIVE db 0 ; It is a good idea to store it in memory because 'dl' may get overwritten
 MSG_REAL_MODE db "Started in 16-bit Real Mode", 0
 
 ; Fill the rest of the sector with zeros (510 bytes total)
