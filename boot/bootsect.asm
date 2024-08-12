@@ -35,6 +35,7 @@ start:
 %include "boot/print_hex.asm"
 %include "boot/disk.asm"
 %include "boot/32bit_print.asm"
+%include "boot/gdt.asm"
 
 BOOT_DRIVE db 0 ; It is a good idea to store it in memory because 'dl' may get overwritten
 MSG_REAL_MODE db "Started in 16-bit Real Mode", 0
