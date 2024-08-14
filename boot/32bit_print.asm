@@ -7,6 +7,9 @@ WHITE_ON_BLACK equ 0x0f            ; The color byte for white text on black back
 ;-----------------------------------------------------------------------
 ; Function: print_string_pm
 ; Purpose:  Prints a null-terminated string to the screen in 32-bit mode.
+;           After switching to 32 bit protected mode we can't use interrupts anymore.
+;           So we need print string routine which works in 32-bit mode, where we don't have BIOS interrupts.
+;           We will do it by directly manipulating the VGA video memory instead of calling int 0x10.
 ;
 ; Parameters:
 ;   esi - Pointer to the string to be printed.
