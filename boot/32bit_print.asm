@@ -1,4 +1,4 @@
-[bits 32] ; Using 32-bit protected mode
+bits 32; Using 32-bit protected mode
 
 ; Constants
 VIDEO_MEMORY equ 0xb8000           ; Video memory base address
