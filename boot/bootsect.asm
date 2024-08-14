@@ -3,6 +3,8 @@
 ; We need to tell the assembler to calculate all addresses with this offset.
 org 0x7C00
 
+KERNEL_OFFSET equ 0x1000 ; We will use the same when linking the kernel
+
 ; The OS is first launched in real mode (which is 16-bit mode).
 bits 16
 
@@ -27,19 +29,33 @@ start:
     call print
     call print_nl
 
+    call load_kernel ; read the kernel from disk
     call switch_to_pm ; disable interrupts, load GDT,  etc. Finally jumps to 'BEGIN_PM'
 
     jmp $   ; Never executed
 
 
+bits 16
+load_kernel:
+    mov si, MSG_LOAD_KERNEL
+    call print
+    call print_nl
 
-[bits 32]
+    mov bx, KERNEL_OFFSET ; Read from disk and store in 0x1000
+    mov dh, 16 ; Our future kernel will be larger, make this big
+    mov dl, [BOOT_DRIVE]
+    call disk_load
+    ret
+
+
+
+bits 32
 BEGIN_PM:
 
     mov esi, MSG_PROTECTED_MODE
     call print_string_pm
 
-    ; here we will pass control to OS.
+    call KERNEL_OFFSET ; Give control to the kernel
 
     jmp $ ; Stay here when the kernel returns control to us (it should never happen)
 
@@ -53,6 +69,7 @@ BEGIN_PM:
 BOOT_DRIVE db 0 ; It is a good idea to store it in memory because 'dl' may get overwritten
 MSG_REAL_MODE db "Started in 16-bit Real Mode", 0
 MSG_PROTECTED_MODE db "Landed in 32-bit Protected Mode", 0
+MSG_LOAD_KERNEL db "Loading kernel into memory", 0
 
 ; Fill the rest of the sector with zeros (510 bytes total)
 times 510-($-$$) db 0
