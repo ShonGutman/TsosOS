@@ -10,7 +10,7 @@
 ;   ------------------------
 ;   
 ;   Base (32 bit) - Start address of the segment (in our case 0x00)
-;   Limit (20 bit) - Length of segment (int our case 0xfffff, which is the maximum)
+;   Limit (20 bit) - Length of segment (in our case 0xfffff, which is the maximum)
 ;   Present (1 bit) - 1 for used segments (in our case - 1)
 ;   Privilege (2 bit) - help define segment protection (possible options: 00 | 01 | 10 | 11 . in our case - 00)
 ;   Type (1 bit) - 1 if Code or Data segment (in our case - 1)
