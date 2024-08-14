@@ -27,18 +27,32 @@ start:
     call print
     call print_nl
 
+    call switch_to_pm ; disable interrupts, load GDT,  etc. Finally jumps to 'BEGIN_PM'
 
-    jmp $   ; Jump to the current address to create an infinite loop
+    jmp $   ; Never executed
 
+
+
+[bits 32]
+BEGIN_PM:
+
+    mov esi, MSG_PROTECTED_MODE
+    call print_string_pm
+
+    ; here we will pass control to OS.
+
+    jmp $ ; Stay here when the kernel returns control to us (it should never happen)
 
 %include "boot/print.asm"
 %include "boot/print_hex.asm"
 %include "boot/disk.asm"
 %include "boot/32bit_print.asm"
 %include "boot/gdt.asm"
+%include "boot/switch_pm.asm"
 
 BOOT_DRIVE db 0 ; It is a good idea to store it in memory because 'dl' may get overwritten
 MSG_REAL_MODE db "Started in 16-bit Real Mode", 0
+MSG_PROTECTED_MODE db "Landed in 32-bit Protected Mode", 0
 
 ; Fill the rest of the sector with zeros (510 bytes total)
 times 510-($-$$) db 0
