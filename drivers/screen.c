@@ -47,7 +47,30 @@ static uint32 get_col_offset(const uint32 offset);
 static void print_char(const char c);
 
 
+/**********************************************************
+ * Public Kernel API functions                            *
+ **********************************************************/
 
+void print(const char* string)
+{
+    for(uint32 i = 0; string[i] != '\0'; i++)
+    {
+        print_char(string[i]);
+    }
+}
+
+void clear_screen()
+{
+    char* video_memory = (char*) VIDEO_MEMORY;
+
+    for(uint16 i = 0; i < MAX_ROWS * MAX_COLS; i++)
+    {
+        video_memory[2 * i] = ' ';
+        video_memory[(2 * i) + 1] = WHITE_ON_BLACK;
+    }
+    
+    set_cursor_offset(0);
+}
 
 
 

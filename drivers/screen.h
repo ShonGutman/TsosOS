@@ -4,15 +4,18 @@
 #include "ports.h"
 
 /*
- * Retrieves the current cursor position in the `VGA` text buffer by querying the `VGA` controller.
- * The cursor position is returned as an offset in the `VGA` memory. Each cell in `VGA` memory 
- * consists of a character and its associated color attribute, so the offset is multiplied by 2.
+ * Prints a null-terminated string to the `VGA` text buffer
  *
- *
- * @return The offset in the `VGA` text buffer where the cursor is currently located, 
- *         multiplied by 2 because each cell in the `VGA` memory is 2 bytes.
+ * @param string The null-terminated string to be printed.
  */
-uint32 get_cursor_offset();
+void print(const char* string);
+
+/*
+ * Clears the entire `VGA` text buffer by setting every character cell to a space character 
+ * with a white-on-black color attribute. After clearing, the cursor is reset to the 
+ * beginning of the screen.
+ */
+void clear_screen();
 
 
 #endif
