@@ -180,24 +180,11 @@ static void print_char(const char c)
 {
     uint32 offset = get_cursor_offset();
 
-    if (offset >= MAX_COLS * MAX_ROWS * 2)
-    {
-        // We ran out of space, need to implement scrolling here
-        // For now, we'll just wrap around to the beginning
-        offset = 0;
-    }
 
     if('\n' == c)
     {
         uint32 row = get_row_offset(offset);
         offset = get_offset(row + 1, 0);
-        
-        if (offset >= MAX_COLS * MAX_ROWS * 2)
-        {
-            // We ran out of space, need to implement scrolling here
-            // For now, we'll just wrap around to the beginning
-            offset = 0;
-        }
     }
 
     else
@@ -209,6 +196,27 @@ static void print_char(const char c)
 
         //increase offset by 2 since we printed new char to screen
         offset += 2;
+    }
+
+    if (offset >= MAX_COLS * MAX_ROWS * 2)
+    {
+        //scroll: move all lines one line above (remove line 0)
+        for(uint32 i = 1; i < MAX_ROWS; i++)
+        {
+            memcopy(get_offset(i - 1, 0) + VIDEO_MEMORY,
+                    get_offset(i, 0) + VIDEO_MEMORY, 
+                    MAX_COLS * 2);
+        }
+
+        //clear last line
+        char* lastLine = get_offset(MAX_ROWS - 1, 0) + VIDEO_MEMORY;
+        for(uint32 i = 0; i < MAX_COLS * 2; i++)
+        {
+            lastLine[i] = 0;
+        }
+
+        //decrase offset by one line
+        offset -= MAX_COLS * 2;
     }
 
     set_cursor_offset(offset);
