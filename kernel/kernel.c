@@ -1,8 +1,11 @@
-
-#define VIDEO_MEMORY 0xb8000
+#include "../drivers/screen.h"
 
 void main() 
 {
-    char* video_memory = (char*) VIDEO_MEMORY;
-    *video_memory = 'X';
+    //print project name and our name
+    char* osName = "TSOS\nBy - Shon and Tedy\n";
+
+    clear_screen();
+
+    print(osName);
 }
