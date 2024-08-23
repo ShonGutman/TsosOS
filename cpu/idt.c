@@ -21,4 +21,6 @@ void idt_init()
 {
     idt_info.size = sizeof(idt_entry_struct) * IDT_ENTRIES - 1;
     idt_info.offset = (uint32)&idt_entries;
+
+    __asm__ ("lidt (%0)" : : "r"(&idt_info));
 }
