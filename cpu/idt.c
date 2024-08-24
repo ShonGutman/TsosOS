@@ -1,4 +1,5 @@
 #include "idt.h"
+#include "../drivers/screen.h"
 
 #define IDT_ENTRIES 256
 
@@ -23,4 +24,14 @@ void idt_init()
     idt_info.offset = (uint32)&idt_entries;
 
     __asm__ ("lidt (%0)" : : "r"(&idt_info));
+}
+
+void isr_handler(interrupt_registers_struct regs)
+{
+    //later
+}
+
+void isr_install()
+{
+    //later
 }

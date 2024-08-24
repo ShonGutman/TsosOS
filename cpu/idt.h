@@ -46,6 +46,10 @@ void set_idt_entry(const uint8 num, const uint32 offset);
  */
 void idt_init();
 
+void isr_handler(interrupt_registers_struct regs);
+
+void isr_install();
+
 
 
 
