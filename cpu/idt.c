@@ -25,13 +25,3 @@ void idt_init()
 
     __asm__ ("lidt (%0)" : : "r"(&idt_info));
 }
-
-void isr_handler(interrupt_registers_struct regs)
-{
-    //later
-}
-
-void isr_install()
-{
-    //later
-}
