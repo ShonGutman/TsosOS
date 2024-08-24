@@ -3,11 +3,11 @@
 # $< = first dependency
 # $^ = all dependencies
 
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c libc/*.c)
-HEADERS = $(wildcard kernel/*.h drivers/*.h libc/*.h)
+C_SOURCES = $(wildcard kernel/*.c drivers/*.c libc/*.c cpu/*.c)
+HEADERS = $(wildcard kernel/*.h drivers/*.h libc/*.h cpu/*.c)
 
 # Nice syntax for file extension replacement
-OBJ = ${C_SOURCES:.c=.o}
+OBJ = ${C_SOURCES:.c=.o cpu/interrupt.o}
 
 # Change this if your cross-compiler is somewhere else
 CC = /usr/bin/gcc
@@ -62,7 +62,7 @@ debug: os-image.bin kernel.elf
 
 clean:
 	rm -rf *.bin *.dis *.o os-image.bin *.elf
-	rm -rf kernel/*.o boot/*.bin drivers/*.o libc/*.o boot/*.o
+	rm -rf kernel/*.o boot/*.bin drivers/*.o libc/*.o cpu/*.o boot/*.o
 	
 # Phony targets
 .PHONY: all run debug clean
