@@ -8,6 +8,7 @@
 
 #define EOI 0x20
 
+//this is an array of functions with this signature: void funcName(interrupt_registers_struct);
 void (*irq_routines[TOTAL_IRQ])(interrupt_registers_struct) = 
 {
     0, 0, 0, 0, 0, 0, 0, 0,

@@ -6,7 +6,7 @@
 void isr_handler(interrupt_registers_struct regs)
 {
     print("interrupt occured! system hlts");
-    for(;;);
+    while(1);
 }
 
 void isr_install()
