@@ -1,4 +1,6 @@
 #include "pic.h"
+#include "irq.h"
+#include "idt.h"
 
 #define MASTER_PIC_COMMAND_PORT 0x20
 #define MASTER_PIC_DATA_PORT 0X21
@@ -31,6 +33,23 @@ void pic_init()
      * - IRQs 8-15 are remapped to interrupts 40-47.
      */
     pic_remap(32, 40);
+
+    set_idt_entry(32, (uint32)irq0);
+    set_idt_entry(33, (uint32)irq1);
+    set_idt_entry(34, (uint32)irq2);
+    set_idt_entry(35, (uint32)irq3);
+    set_idt_entry(36, (uint32)irq4);
+    set_idt_entry(37, (uint32)irq5);
+    set_idt_entry(38, (uint32)irq6);
+    set_idt_entry(39, (uint32)irq7);
+    set_idt_entry(40, (uint32)irq8);
+    set_idt_entry(41, (uint32)irq9);
+    set_idt_entry(42, (uint32)irq10);
+    set_idt_entry(43, (uint32)irq11);
+    set_idt_entry(44, (uint32)irq12);
+    set_idt_entry(45, (uint32)irq13);
+    set_idt_entry(46, (uint32)irq14);
+    set_idt_entry(47, (uint32)irq15);
 }
 
 
