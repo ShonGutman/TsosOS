@@ -3,11 +3,11 @@
 # $< = first dependency
 # $^ = all dependencies
 
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c libc/*.c)
-HEADERS = $(wildcard kernel/*.h drivers/*.h libc/*.h)
+C_SOURCES = $(shell find kernel drivers libc cpu -name '*.c')
+HEADERS = $(shell find kernel drivers libc cpu -name '*.c')
 
 # Nice syntax for file extension replacement
-OBJ = ${C_SOURCES:.c=.o}
+OBJ = ${C_SOURCES:.c=.o cpu/interrupts/interrupt.o}
 
 # Change this if your cross-compiler is somewhere else
 CC = /usr/bin/gcc
@@ -23,7 +23,7 @@ QEMU_FLAGS = -fda
 QEMU_DEBUG_FLAGS = -s -S -fda
 
 # -g: Use debugging symbols in gcc
-CFLAGS = -m32 -g -ffreestanding -fno-pie -fno-pic
+CFLAGS = -m32 -g -ffreestanding -fno-pie -fno-pic -I.
 
 # Default target
 all: run
@@ -61,8 +61,9 @@ debug: os-image.bin kernel.elf
 	${NASM} $< ${NASM_FLAGS_BIN} -o $@
 
 clean:
-	rm -rf *.bin *.dis *.o os-image.bin *.elf
-	rm -rf kernel/*.o boot/*.bin drivers/*.o libc/*.o boot/*.o
+	rm -rf *.bin *.dis *.o os-image.bin boot/bootsect.bin *.elf
+
+	find -name '*.o' -type f -delete
 	
 # Phony targets
 .PHONY: all run debug clean

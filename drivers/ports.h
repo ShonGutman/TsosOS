@@ -1,7 +1,7 @@
 #ifndef PORTS_H
 #define PORTS_H
 
-#include "../headers/types.h"
+#include "headers/types.h"
 
 /*
  * Reads a byte of data from the specified I/O port using the `in` assembly instruction.

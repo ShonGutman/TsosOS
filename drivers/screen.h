@@ -2,7 +2,7 @@
 #define SCREEN_H
 
 #include "ports.h"
-#include "../libc/memory.h"
+#include "libc/memory.h"
 
 /*
  * Prints a null-terminated string to the `VGA` text buffer
