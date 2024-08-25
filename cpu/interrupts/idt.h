@@ -1,7 +1,7 @@
 #ifndef IDT_H
 #define IDT_H
 
-#include "../headers/types.h"
+#include "headers/types.h"
 
 typedef struct
 {

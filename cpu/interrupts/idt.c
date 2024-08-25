@@ -1,5 +1,5 @@
 #include "idt.h"
-#include "../drivers/screen.h"
+#include "drivers/screen.h"
 
 #define IDT_ENTRIES 256
 

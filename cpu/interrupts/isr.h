@@ -1,7 +1,7 @@
 #ifndef ISR_H
 #define ISR_H
 
-#include "../headers/types.h"
+#include "headers/types.h"
 
 void isr_handler(interrupt_registers_struct regs);
 
