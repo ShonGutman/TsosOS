@@ -54,7 +54,7 @@
         cli
         push byte %2
         jmp irq_common_stub
-
+%endmacro
 
 ISR_NO_ERRCODE 0
 ISR_NO_ERRCODE 1
