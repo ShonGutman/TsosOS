@@ -3,8 +3,8 @@
 # $< = first dependency
 # $^ = all dependencies
 
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c libc/*.c cpu/*.c)
-HEADERS = $(wildcard kernel/*.h drivers/*.h libc/*.h cpu/*.c)
+C_SOURCES = $(shell find kernel drivers libc cpu -name '*.c')
+HEADERS = $(shell find kernel drivers libc cpu -name '*.c')
 
 # Nice syntax for file extension replacement
 OBJ = ${C_SOURCES:.c=.o cpu/interrupt.o}
@@ -62,7 +62,8 @@ debug: os-image.bin kernel.elf
 
 clean:
 	rm -rf *.bin *.dis *.o os-image.bin *.elf
-	rm -rf kernel/*.o boot/*.bin drivers/*.o libc/*.o cpu/*.o boot/*.o
+
+	find -name '*.o' -type f -delete
 	
 # Phony targets
 .PHONY: all run debug clean
