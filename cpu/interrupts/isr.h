@@ -5,6 +5,11 @@
 
 void isr_handler(interrupt_registers_struct regs);
 
+/*
+ * Installs the Interrupt Service Routines (ISRs) for the first 32 interrupts.
+ * Each ISR is associated with a specific interrupt number in the IDT (Interrupt Descriptor Table).
+ * After installing the ISRs, the PIC (Programmable Interrupt Controller) is initialized with all IRQs, and the IDT is set up.
+ */
 void isr_install();
 
 

@@ -1,10 +1,12 @@
 #include "isr.h"
 #include "idt.h"
 #include "pic.h"
+#include "drivers/screen.h"
 
 void isr_handler(interrupt_registers_struct regs)
 {
-    //later
+    print("interrupt occured! system hlts");
+    for(;;);
 }
 
 void isr_install()
