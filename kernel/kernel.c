@@ -1,4 +1,4 @@
-#include "../drivers/screen.h"
+#include "drivers/screen.h"
 
 void main() 
 {

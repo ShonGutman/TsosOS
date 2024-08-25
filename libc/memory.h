@@ -1,7 +1,7 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
-#include "../headers/types.h"
+#include "headers/types.h"
 
 
 /*
