@@ -38,3 +38,8 @@ void irq_handler(interrupt_registers_struct regs)
         handler(regs);
     }
 }
+
+void irq_install_handler(const uint8 irqNumber, void (*handler)(interrupt_registers_struct regs))
+{
+    irq_routines[irqNumber] = handler;
+}

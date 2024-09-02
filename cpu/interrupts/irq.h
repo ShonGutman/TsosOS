@@ -12,6 +12,16 @@
  */
 void irq_handler(interrupt_registers_struct regs);
 
+/*
+ * Installs a custom IRQ handler for the specified IRQ number.
+ * This allows the system to execute a specific function whenever the corresponding IRQ is triggered.
+ *
+ * @param irqNumber The IRQ number (0-15) for which the handler is being installed.
+ * @param handler A pointer to the function that handles the interrupt.
+ *                The function must take a single parameter of type `interrupt_registers_struct`.
+ */
+void irq_install_handler(const uint8 irqNumber, void (*handler)(interrupt_registers_struct regs));
+
 /** The system timer generates regular interrupts at a constant rate to keep track of time */
 extern void irq0();
 
