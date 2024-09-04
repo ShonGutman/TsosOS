@@ -1,5 +1,7 @@
 #include "string.h"
 
+#define STRING_TERMINATOR '\0'
+
 /**
  * K&R implementation
  */
