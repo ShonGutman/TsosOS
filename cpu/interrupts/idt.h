@@ -24,7 +24,7 @@ typedef struct
 typedef struct 
 {
     uint16 size;
-    uint16 offset;
+    uint32 offset;
 
 }__attribute__((packed)) idt_info_struct;
 
