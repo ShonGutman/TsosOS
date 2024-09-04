@@ -11,7 +11,7 @@ void main()
     clear_screen();
 
     print(osName);
-
+    //asm("int $2");
     init_timer();
 
     while(1);
