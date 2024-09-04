@@ -1,5 +1,6 @@
 #include "drivers/screen.h"
 #include "cpu/interrupts/isr.h"
+#include "cpu/timer/timer.h"
 
 void main() 
 {
@@ -11,4 +12,7 @@ void main()
 
     print(osName);
 
+    init_timer();
+
+    while(1);
 }

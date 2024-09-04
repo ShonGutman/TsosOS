@@ -12,7 +12,16 @@
 
 uint32 ticks = 0;
 
-void timer_handler(interrupt_registers_struct regs);
+/**********************************************************
+ * Private kernel functions signiture                     *
+ **********************************************************/
+
+static void timer_handler(interrupt_registers_struct regs);
+
+
+/**********************************************************
+ * Public Kernel API functions                            *
+ **********************************************************/
 
 void init_timer()
 {
@@ -57,4 +66,15 @@ void init_timer()
     const uint8 high = (divisor >> 8) & 0xff;
     port_byte_out(CHANNEL0_PORT, low);
     port_byte_out(CHANNEL0_PORT, high);
+}
+
+
+/**********************************************************
+ * Private kernel functions                               *
+ **********************************************************/
+
+static void timer_handler(interrupt_registers_struct regs)
+{
+    ticks++;
+    print("Ticked\n");
 }
