@@ -2,6 +2,7 @@
 #include "cpu/interrupts/isr.h"
 #include "cpu/timer/timer.h"
 #include "drivers/keyboard.h"
+#include "libc/string.h"
 void main() 
 {
     isr_install();
@@ -16,4 +17,13 @@ void main()
     init_keyboard();
 }
 
-
+void procces_user_input(const char* input)
+{
+    if (!strcmp(input, "END"))
+    {
+        print("turning the TsosOS off");
+        asm volatile("hlt");
+    }
+    print(input);
+    print("\n > ");
+}

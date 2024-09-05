@@ -29,6 +29,7 @@
 #define MAX_ROWS 25
 #define MAX_COLS 80
 
+#define BACKSPACE 0x08
 
 /**********************************************************
  * Private kernel functions signiture                     *
@@ -75,7 +76,7 @@ void clear_screen()
 void print_backspace() 
 {
     set_cursor_offset(get_cursor_offset()-2);
-    print_char(0x08);
+    print_char(BACKSPACE);
 }
 
 
@@ -200,7 +201,7 @@ static void print_char(const char c)
 
         // increase offset by 2 since we printed new char to screen
         // we increase it only if the char printed is not backspace
-        if (c != 0x08)
+        if (c != BACKSPACE)
         {
             offset += 2;
         }

@@ -4,7 +4,7 @@
 #include "screen.h"
 #include "cpu/interrupts/irq.h"
 #include "libc/string.h"
-
+#include "kernel/kernel.h"
 
 #define MAX_KEYS 256
 #define BACKSPACE 0x0E
@@ -12,7 +12,7 @@
 
 
 #define SC_MAX 57
-const char *sc_name[] = { "ERROR", "Esc", "1", "2", "3", "4", "5", "6", 
+const char* sc_name[] = { "ERROR", "Esc", "1", "2", "3", "4", "5", "6", 
     "7", "8", "9", "0", "-", "=", "Backspace", "Tab", "Q", "W", "E", 
         "R", "T", "Y", "U", "I", "O", "P", "[", "]", "Enter", "Lctrl", 
         "A", "S", "D", "F", "G", "H", "J", "K", "L", ";", "'", "`", 
@@ -33,12 +33,31 @@ static void keyboard_handler(interrupt_registers_struct regs)
 {
     /* The PIC leaves us the scancode in port 0x60 */
     uint8 scancode = port_byte_in(0x60);
-    
-    char letter = sc_ascii[(int)scancode];
-    /* Remember that kprint only accepts char[] */
-    char str[2] = {letter, STRING_TERMINATOR};
-    append(key_buffer, letter);
-    print(str);
+    //if scancode is unknow then return 
+    if (scancode > SC_MAX)
+    {
+        return;
+    } 
+    if (scancode == BACKSPACE) 
+    {
+        backspace(key_buffer);
+        print_backspace();
+    } 
+    else if (scancode == ENTER) 
+    {
+        print("\n");
+        //kernel function to handle the user input
+        procces_user_input(key_buffer);
+        //reset the buffer sowe would be able to use it again 
+        key_buffer[0] = STRING_TERMINATOR;
+    } 
+    else 
+    {
+        char letter = sc_ascii[(int)scancode];
+        char str[2] = {letter, STRING_TERMINATOR};
+        append(key_buffer, letter);
+        print(str);
+    }
     
 }
 
