@@ -60,6 +60,7 @@
     "types.h": "c",
     "screen.h": "c",
     "keyboard.h": "c",
-    "timer.h": "c"
+    "timer.h": "c",
+    "memory.h": "c"
   }
 }
