@@ -3,7 +3,6 @@
 
 #define STRING_TERMINATOR '\0'
 
-
 /*
  *  turns an int into ascii
  * @param n - the number to turn to ascii

@@ -76,5 +76,4 @@ void init_timer()
 static void timer_handler(interrupt_registers_struct regs)
 {
     ticks++;
-    print("Ticked\n");
 }

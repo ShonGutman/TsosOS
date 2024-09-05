@@ -19,4 +19,7 @@ void print(const char* string);
 void clear_screen();
 
 
+void print_backspace();
+
+
 #endif

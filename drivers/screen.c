@@ -72,6 +72,11 @@ void clear_screen()
     set_cursor_offset(0);
 }
 
+void print_backspace() 
+{
+    set_cursor_offset(get_cursor_offset()-2);
+    print_char(0x08);
+}
 
 
 
@@ -186,7 +191,6 @@ static void print_char(const char c)
         uint32 row = get_row_offset(offset);
         offset = get_offset(row + 1, 0);
     }
-
     else
     {
 
@@ -194,8 +198,12 @@ static void print_char(const char c)
         video_memory[offset] = c;
         video_memory[offset + 1] = WHITE_ON_BLACK;
 
-        //increase offset by 2 since we printed new char to screen
-        offset += 2;
+        // increase offset by 2 since we printed new char to screen
+        // we increase it only if the char printed is not backspace
+        if (c != 0x08)
+        {
+            offset += 2;
+        }
     }
 
     if (offset >= MAX_COLS * MAX_ROWS * 2)
