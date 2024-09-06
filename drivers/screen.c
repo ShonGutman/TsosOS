@@ -29,7 +29,7 @@
 #define MAX_ROWS 25
 #define MAX_COLS 80
 
-#define BACKSPACE 0x08
+#define BACKSPACE ' '
 
 /**********************************************************
  * Private kernel functions signiture                     *
