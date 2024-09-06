@@ -4,7 +4,6 @@
 #include "screen.h"
 #include "cpu/interrupts/irq.h"
 #include "libc/string.h"
-#include "kernel/kernel.h"
 
 #define MAX_KEYS 256
 #define BACKSPACE 0x0E
@@ -93,3 +92,13 @@ void init_keyboard()
    irq_install_handler(1, keyboard_handler); 
 }
 
+void procces_user_input(const char* input)
+{
+    if (!strcmp(input, "END"))
+    {
+        print("turning TsosOS off");
+        asm volatile("hlt");
+    }
+    print(input);
+    print("\n > ");
+}
