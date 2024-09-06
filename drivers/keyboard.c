@@ -10,15 +10,9 @@
 #define ENTER 0x1C
 
 
-#define SC_MAX 57
-const char* sc_name[] = { "ERROR", "Esc", "1", "2", "3", "4", "5", "6", 
-    "7", "8", "9", "0", "-", "=", "Backspace", "Tab", "Q", "W", "E", 
-        "R", "T", "Y", "U", "I", "O", "P", "[", "]", "Enter", "Lctrl", 
-        "A", "S", "D", "F", "G", "H", "J", "K", "L", ";", "'", "`", 
-        "LShift", "\\", "Z", "X", "C", "V", "B", "N", "M", ",", ".", 
-        "/", "RShift", "Keypad *", "LAlt", "Spacebar"};
+#define SCANCODE_MAX 57
 
-const char sc_ascii[] = { '?', '?', '1', '2', '3', '4', '5', '6',     
+const char scancode_ascii[] = { '?', '?', '1', '2', '3', '4', '5', '6',     
     '7', '8', '9', '0', '-', '=', '?', '?', 'Q', 'W', 'E', 'R', 'T', 'Y', 
         'U', 'I', 'O', 'P', '[', ']', '?', '?', 'A', 'S', 'D', 'F', 'G', 
         'H', 'J', 'K', 'L', ';', '\'', '`', '?', '\\', 'Z', 'X', 'C', 'V', 
@@ -44,7 +38,7 @@ const char sc_ascii[] = { '?', '?', '1', '2', '3', '4', '5', '6',
  * 3: if the character isnt special we add him into a key buffer (256 in size)
  * and print that character.
  * if that character is backspcae we remove the last one
- * if that character is ENTER we send the entire key buffer to the kernel to procces and handle
+ * if that character is ENTER we send the entire key buffer to a procces_input function
  * 
  *  -------------------------------------
  */
@@ -54,19 +48,23 @@ const char sc_ascii[] = { '?', '?', '1', '2', '3', '4', '5', '6',
 static char key_buffer[MAX_KEYS];
 
 
-static void keyboard_handler(interrupt_registers_struct regs) 
+void keyboard_handler(interrupt_registers_struct regs) 
 {
     /* The PIC leaves us the scancode in port 0x60 */
     uint8 scancode = port_byte_in(0x60);
     //if scancode is unknow then return 
-    if (scancode > SC_MAX)
+    if (scancode > SCANCODE_MAX)
     {
         return;
     } 
     if (scancode == BACKSPACE) 
     {
-        backspace(key_buffer);
-        print_backspace();
+        //check that there are characters to delete
+        if (key_buffer[0] != 0)
+        {
+            backspace(key_buffer);
+            print_backspace();
+        }
     } 
     else if (scancode == ENTER) 
     {
@@ -78,7 +76,7 @@ static void keyboard_handler(interrupt_registers_struct regs)
     } 
     else 
     {
-        char letter = sc_ascii[(int)scancode];
+        char letter = scancode_ascii[(int)scancode];
         char str[2] = {letter, STRING_TERMINATOR};
         append(key_buffer, letter);
         print(str);

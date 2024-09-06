@@ -1,22 +1,19 @@
 #include "string.h"
 
-
-/**
- * K&R implementation
- */
-void int_to_ascii(int n, char *str) 
+void int_to_ascii(uint32 number, char* str) 
 {
-    int i, sign;
-    if ((sign = n) < 0)
+    uint32 i = 0;
+    uint32 sign = 0;
+    if ((sign = number) < 0)
     {
-        n = -n;
+        number = -number;
     } 
     i = 0;
     do 
     {
-        str[i++] = n % 10 + '0';
+        str[i++] = number % 10 + '0';
     } 
-    while ((n /= 10) > 0);
+    while ((number /= 10) > 0);
 
     if (sign < 0)
     {
@@ -26,11 +23,11 @@ void int_to_ascii(int n, char *str)
     reverse(str);
 }
 
-/* K&R */
-void reverse(char *str) 
+void reverse(char* str) 
 {
-    int c, i, j;
-    j = strlen(str)-1;
+    uint32 c = 0;
+    uint32 i = 0;
+    uint32 j = strlen(str)-1;;
     for (i = 0; i < j; i++, j--) 
     {
         c = str[i];
@@ -39,10 +36,9 @@ void reverse(char *str)
     }
 }
 
-/* K&R */
-int strlen(char *str) 
+uint32 strlen(char* str) 
 {
-    int i = 0;
+    uint32 i = 0;
     while (str[i] != STRING_TERMINATOR) 
     {
         ++i;
@@ -50,24 +46,24 @@ int strlen(char *str)
     return i;
 }
 
-void append(char *str, char n) 
+void append(char* str, char n) 
 {
-    int len = strlen(str);
+    uint32 len = strlen(str);
     str[len] = n;
     str[len+1] = STRING_TERMINATOR;
 }
 
-void backspace(char *str) 
+void backspace(char* str) 
 {
-    int len = strlen(str);
+    uint32 len = strlen(str);
     str[len-1] = STRING_TERMINATOR;
 }
 
-/* K&R 
- * Returns <0 if s1<s2, 0 if s1==s2, >0 if s1>s2 */
-int strcmp(const char *str1, const char *str2) 
+
+/* Returns <0 if s1<s2, 0 if s1==s2, >0 if s1>s2 */
+uint32 strcmp(const char* str1, const char* str2) 
 {
-    int i;
+    uint32 i = 0;
     for (i = 0; str1[i] == str2[i]; i++) 
     {
         if (str1[i] == STRING_TERMINATOR)

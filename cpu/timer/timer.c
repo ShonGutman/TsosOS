@@ -16,7 +16,7 @@ uint32 ticks = 0;
  * Private kernel functions signiture                     *
  **********************************************************/
 
-static void timer_handler(interrupt_registers_struct regs);
+void timer_handler(interrupt_registers_struct regs);
 
 
 /**********************************************************
@@ -73,7 +73,7 @@ void init_timer()
  * Private kernel functions                               *
  **********************************************************/
 
-static void timer_handler(interrupt_registers_struct regs)
+void timer_handler(interrupt_registers_struct regs)
 {
     ticks++;
 }
