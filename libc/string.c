@@ -1,56 +1,51 @@
 #include "string.h"
 
-void int_to_ascii(uint32 number, char* str) 
+void int_to_ascii(const int32 number, char* str) 
 {
     uint32 i = 0;
-    uint32 sign = 0;
-    if ((sign = number) < 0)
+    int32 temp = number;
+    int8 negetive = 0;
+
+    if (temp < 0)
     {
-        number = -number;
+        temp *= -1;
+        negetive = 1;
     } 
-    i = 0;
+
     do 
     {
-        str[i++] = number % 10 + '0';
+        str[i++] = temp % 10 + '0';
     } 
-    while ((number /= 10) > 0);
+    while ((temp /= 10) > 0);
 
-    if (sign < 0)
+    if (temp < 0)
     {
         str[i++] = '-';
     } 
+
     str[i] = STRING_TERMINATOR;
     reverse(str);
 }
 
 void reverse(char* str) 
 {
-    uint32 c = 0;
-    uint32 i = 0;
-    uint32 j = strlen(str)-1;;
-    for (i = 0; i < j; i++, j--) 
+    const uint32 size = strlen(str);
+    for (uint32 i = 0; i < size / 2; i++) 
     {
-        c = str[i];
-        str[i] = str[j];
-        str[j] = c;
+        char temp = str[i];
+        str[i] = str[size - i - 1];
+        str[size - i - 1] = temp;
     }
 }
 
-uint32 strlen(char* str) 
+uint32 strlen(const char* str) 
 {
     uint32 i = 0;
     while (str[i] != STRING_TERMINATOR) 
     {
-        ++i;
+        i++;
     }
     return i;
-}
-
-void append(char* str, char n) 
-{
-    uint32 len = strlen(str);
-    str[len] = n;
-    str[len+1] = STRING_TERMINATOR;
 }
 
 void backspace(char* str) 
@@ -59,17 +54,22 @@ void backspace(char* str)
     str[len-1] = STRING_TERMINATOR;
 }
 
-
-/* Returns <0 if s1<s2, 0 if s1==s2, >0 if s1>s2 */
-uint32 strcmp(const char* str1, const char* str2) 
+void append(char* str, const char appended) 
 {
-    uint32 i = 0;
-    for (i = 0; str1[i] == str2[i]; i++) 
+    const uint32 len = strlen(str);
+    str[len] = appended;
+    str[len + 1] = STRING_TERMINATOR;
+}
+
+
+
+int32 strcmp(const char* str1, const char* str2) 
+{
+    while(*str1 && (*str1 == *str2))
     {
-        if (str1[i] == STRING_TERMINATOR)
-        {
-            return 0;
-        } 
+        str1++;
+        str2++;
     }
-    return str1[i] - str2[i];
+
+    return *str1 - *str2;
 }
