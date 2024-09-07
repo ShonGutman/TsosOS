@@ -18,7 +18,7 @@ LD_FLAGS = -m elf_i386
 NASM = nasm
 NASM_FLAGS_BIN = -f bin
 NASM_FLAGS_ELF = -f elf
-QEMU = qemu-system-x86_64
+QEMU = qemu-system-i386
 QEMU_FLAGS = -fda
 QEMU_DEBUG_FLAGS = -s -S -fda
 
@@ -35,7 +35,7 @@ os-image.bin: boot/bootsect.bin kernel.bin
 # '--oformat binary' deletes all symbols as a collateral, so we don't need
 # to 'strip' them manually on this case
 kernel.bin: boot/kernel_entry.o ${OBJ}
-	${LD} ${LD_FLAGS} -o $@ -Ttext 0x1000 $^ --oformat binary
+	${LD} ${LD_FLAGS} -o $@ -T linker.ld $^ --oformat binary
 
 # Used for debugging purposes
 kernel.elf: boot/kernel_entry.o ${OBJ}
