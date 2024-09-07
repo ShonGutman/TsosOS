@@ -11,6 +11,14 @@
 #define CAPSLOCK 0x3A
 #define SPACE_ASCII ' '
 #define CAPPED_TO_NORMAL_ASCII 32
+//all of the shift
+#define LEFT_SHIFT 0x2A
+#define RIGHT_SHIFT 0x36
+#define SHIFT_RELEASED_LEFT 0xAA
+#define SHIFT_RELEASED_RIGHT 0xB6
+
+#define ASCII_ABC_END 90
+#define ASCII_ABC_START 65
 
 #define SCANCODE_MAX 58
 
@@ -19,6 +27,13 @@ const char scancode_ascii[] = { '?', '?', '1', '2', '3', '4', '5', '6',
         'U', 'I', 'O', 'P', '[', ']', '?', '?', 'A', 'S', 'D', 'F', 'G', 
         'H', 'J', 'K', 'L', ';', '\'', '`', '?', '\\', 'Z', 'X', 'C', 'V', 
         'B', 'N', 'M', ',', '.', '/', '?', '?', '?', ' '};
+
+//when shift is pressed the characters to be printed are different
+const char scancode_ascii_shifted[] = { '?', '?', '!', '@', '#', '$', '%', '^', 
+    '&', '*', '(', ')', '_', '+', '?', '?', 'Q', 'W', 'E', 'R', 'T', 'Y', 
+    'U', 'I', 'O', 'P', '{', '}', '?', '?', 'A', 'S', 'D', 'F', 'G', 
+    'H', 'J', 'K', 'L', ':', '\"', '~', '?', '|', 'Z', 'X', 'C', 'V', 
+    'B', 'N', 'M', '<', '>', '?', '?', '?', '?', ' '};
 
 /**
  * The keyboard hardware communicates with the operating system by sending
@@ -50,16 +65,32 @@ const char scancode_ascii[] = { '?', '?', '1', '2', '3', '4', '5', '6',
 static char key_buffer[MAX_KEYS];
 
 int capslock_value_change = CAPPED_TO_NORMAL_ASCII;
+int shift_pressed = 0;
 
 void keyboard_handler(interrupt_registers_struct regs) 
 {
     /* The PIC leaves us the scancode in port 0x60 */
     uint8 scancode = port_byte_in(0x60);
     //if scancode is unknow then return 
-    if (scancode > SCANCODE_MAX)
+    if (scancode > SCANCODE_MAX && scancode != SHIFT_RELEASED_LEFT && scancode != SHIFT_RELEASED_RIGHT)
     {
         return;
     }
+
+    
+    // Track shift key press and release
+    if (scancode == LEFT_SHIFT || scancode == RIGHT_SHIFT) 
+    {
+        shift_pressed = 1;
+        return;
+    }
+    else if (scancode == SHIFT_RELEASED_LEFT || scancode == SHIFT_RELEASED_RIGHT) 
+    {
+        shift_pressed = 0;
+        return;
+    }
+
+
     //change character value based on the amount of times capslock was pressed
     if (scancode == CAPSLOCK)
     {
@@ -84,7 +115,10 @@ void keyboard_handler(interrupt_registers_struct regs)
     } 
     else if (scancode == ENTER) 
     {
-        print("\n");
+        if (key_buffer[0] != STRING_TERMINATOR)
+        {
+            print("\n");
+        }
         //kernel function to handle the user input
         procces_user_input(key_buffer);
         //reset the buffer sowe would be able to use it again 
@@ -92,9 +126,17 @@ void keyboard_handler(interrupt_registers_struct regs)
     } 
     else 
     {
-        char letter = scancode_ascii[(int)scancode];
-        // we dont want to change the space key if capslock is pressed
-        if (letter != SPACE_ASCII)
+        char letter = 0;
+        if (shift_pressed)
+        {
+            letter = scancode_ascii_shifted[(int)scancode];
+        }
+        else
+        {
+            letter = scancode_ascii[(int)scancode];
+        }
+        // we dont want to change anything other than letters
+        if (letter != SPACE_ASCII && !shift_pressed && letter >= ASCII_ABC_START && letter <= ASCII_ABC_END)
         {
             letter += capslock_value_change;
         }
