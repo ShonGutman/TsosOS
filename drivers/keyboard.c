@@ -8,9 +8,11 @@
 #define MAX_KEYS 256
 #define BACKSPACE 0x0E
 #define ENTER 0x1C
+#define CAPSLOCK 0x3A
+#define SPACE_ASCII ' '
+#define CAPPED_TO_NORMAL_ASCII 32
 
-
-#define SCANCODE_MAX 57
+#define SCANCODE_MAX 58
 
 const char scancode_ascii[] = { '?', '?', '1', '2', '3', '4', '5', '6',     
     '7', '8', '9', '0', '-', '=', '?', '?', 'Q', 'W', 'E', 'R', 'T', 'Y', 
@@ -47,6 +49,7 @@ const char scancode_ascii[] = { '?', '?', '1', '2', '3', '4', '5', '6',
 
 static char key_buffer[MAX_KEYS];
 
+int capslock_value_change = CAPPED_TO_NORMAL_ASCII;
 
 void keyboard_handler(interrupt_registers_struct regs) 
 {
@@ -56,8 +59,21 @@ void keyboard_handler(interrupt_registers_struct regs)
     if (scancode > SCANCODE_MAX)
     {
         return;
-    } 
-    if (scancode == BACKSPACE) 
+    }
+    //change character value based on the amount of times capslock was pressed
+    if (scancode == CAPSLOCK)
+    {
+        if (capslock_value_change == 0)
+        {
+            capslock_value_change += CAPPED_TO_NORMAL_ASCII;
+        }
+        else
+        {
+            capslock_value_change = 0;
+        }
+        
+    }
+    else if (scancode == BACKSPACE) 
     {
         //check that there are characters to delete
         if (key_buffer[0] != 0)
@@ -77,6 +93,11 @@ void keyboard_handler(interrupt_registers_struct regs)
     else 
     {
         char letter = scancode_ascii[(int)scancode];
+        // we dont want to change the space key if capslock is pressed
+        if (letter != SPACE_ASCII)
+        {
+            letter += capslock_value_change;
+        }
         char str[2] = {letter, STRING_TERMINATOR};
         append(key_buffer, letter);
         print(str);

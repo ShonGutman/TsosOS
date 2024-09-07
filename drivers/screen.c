@@ -29,7 +29,8 @@
 #define MAX_ROWS 25
 #define MAX_COLS 80
 
-#define BACKSPACE ' '
+#define SPACE_ASCII ' '
+#define BACKSPACE_ASCII 0x08
 
 /**********************************************************
  * Private kernel functions signiture                     *
@@ -76,7 +77,7 @@ void clear_screen()
 void print_backspace() 
 {
     set_cursor_offset(get_cursor_offset()-2);
-    print_char(BACKSPACE);
+    print_char(BACKSPACE_ASCII);
 }
 
 
@@ -194,14 +195,25 @@ static void print_char(const char c)
     }
     else
     {
-
+        
+        
         char* video_memory = (char*) VIDEO_MEMORY;
-        video_memory[offset] = c;
+
+        //because backspace and space are the same printable char (' ') we 
+        // have to check accordingly
+        if (c == BACKSPACE_ASCII)
+        {
+            video_memory[offset] = SPACE_ASCII;
+        }
+        else
+        {
+            video_memory[offset] = c;
+        }
         video_memory[offset + 1] = WHITE_ON_BLACK;
 
         // increase offset by 2 since we printed new char to screen
         // we increase it only if the char printed is not backspace
-        if (c != BACKSPACE)
+        if (c != BACKSPACE_ASCII)
         {
             offset += 2;
         }
