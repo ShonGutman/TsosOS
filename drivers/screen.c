@@ -46,7 +46,7 @@ static uint32 get_row_offset(const uint32 offset);
 
 static uint32 get_col_offset(const uint32 offset);
 
-static void print_char(const char c);
+
 
 
 /**********************************************************
@@ -79,6 +79,70 @@ void print_backspace()
     set_cursor_offset(get_cursor_offset()-2);
     print_char(BACKSPACE_ASCII);
 }
+
+
+
+void print_char(const char c)
+{
+    uint32 offset = get_cursor_offset();
+
+
+    if('\n' == c)
+    {
+        uint32 row = get_row_offset(offset);
+        offset = get_offset(row + 1, 0);
+    }
+    else
+    {
+        
+        
+        char* video_memory = (char*) VIDEO_MEMORY;
+
+        //because backspace and space are the same printable char (' ') we 
+        // have to check accordingly
+        if (c == BACKSPACE_ASCII)
+        {
+            video_memory[offset] = SPACE_ASCII;
+        }
+        else
+        {
+            video_memory[offset] = c;
+        }
+        video_memory[offset + 1] = WHITE_ON_BLACK;
+
+        // increase offset by 2 since we printed new char to screen
+        // we increase it only if the char printed is not backspace
+        if (c != BACKSPACE_ASCII)
+        {
+            offset += 2;
+        }
+    }
+
+    if (offset >= MAX_COLS * MAX_ROWS * 2)
+    {
+        //scroll: move all lines one line above (remove line 0)
+        for(uint32 i = 1; i < MAX_ROWS; i++)
+        {
+            memcopy(get_offset(i - 1, 0) + VIDEO_MEMORY,
+                    get_offset(i, 0) + VIDEO_MEMORY, 
+                    MAX_COLS * 2);
+        }
+
+        //clear last line
+        char* lastLine = get_offset(MAX_ROWS - 1, 0) + VIDEO_MEMORY;
+        for(uint32 i = 0; i < MAX_COLS * 2; i++)
+        {
+            lastLine[i] = 0;
+        }
+
+        //decrase offset by one line
+        offset -= MAX_COLS * 2;
+    }
+
+    set_cursor_offset(offset);
+}
+
+
 
 
 
@@ -178,67 +242,3 @@ static uint32 get_col_offset(const uint32 offset)
 }
 
 
-/*
- * Prints a single character to the `VGA` text buffer at the current cursor position and moves curser to new location
- *
- * @param c The character to be printed.
- */
-static void print_char(const char c)
-{
-    uint32 offset = get_cursor_offset();
-
-
-    if('\n' == c)
-    {
-        uint32 row = get_row_offset(offset);
-        offset = get_offset(row + 1, 0);
-    }
-    else
-    {
-        
-        
-        char* video_memory = (char*) VIDEO_MEMORY;
-
-        //because backspace and space are the same printable char (' ') we 
-        // have to check accordingly
-        if (c == BACKSPACE_ASCII)
-        {
-            video_memory[offset] = SPACE_ASCII;
-        }
-        else
-        {
-            video_memory[offset] = c;
-        }
-        video_memory[offset + 1] = WHITE_ON_BLACK;
-
-        // increase offset by 2 since we printed new char to screen
-        // we increase it only if the char printed is not backspace
-        if (c != BACKSPACE_ASCII)
-        {
-            offset += 2;
-        }
-    }
-
-    if (offset >= MAX_COLS * MAX_ROWS * 2)
-    {
-        //scroll: move all lines one line above (remove line 0)
-        for(uint32 i = 1; i < MAX_ROWS; i++)
-        {
-            memcopy(get_offset(i - 1, 0) + VIDEO_MEMORY,
-                    get_offset(i, 0) + VIDEO_MEMORY, 
-                    MAX_COLS * 2);
-        }
-
-        //clear last line
-        char* lastLine = get_offset(MAX_ROWS - 1, 0) + VIDEO_MEMORY;
-        for(uint32 i = 0; i < MAX_COLS * 2; i++)
-        {
-            lastLine[i] = 0;
-        }
-
-        //decrase offset by one line
-        offset -= MAX_COLS * 2;
-    }
-
-    set_cursor_offset(offset);
-}

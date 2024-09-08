@@ -5,6 +5,8 @@
 #include "cpu/interrupts/irq.h"
 #include "libc/string.h"
 
+#define KEYBOARD_DATA_PORT 0x60
+
 #define MAX_KEYS 256
 #define BACKSPACE 0x0E
 #define ENTER 0x1C
@@ -64,14 +66,14 @@ const char scancode_ascii_shifted[] = { '?', '?', '!', '@', '#', '$', '%', '^',
 
 static char key_buffer[MAX_KEYS];
 
-int capslock_value_change = CAPPED_TO_NORMAL_ASCII;
-int shift_pressed = 0;
+static uint8 capslock_value_change = CAPPED_TO_NORMAL_ASCII;
+static uint8 shift_pressed = 0;
 
 void keyboard_handler(interrupt_registers_struct regs) 
 {
     /* The PIC leaves us the scancode in port 0x60 */
-    uint8 scancode = port_byte_in(0x60);
-    //if scancode is unknow then return 
+    uint8 scancode = port_byte_in(KEYBOARD_DATA_PORT);
+    //if scancode is unknow (above the range of know scancodes) then return 
     if (scancode > SCANCODE_MAX && scancode != SHIFT_RELEASED_LEFT && scancode != SHIFT_RELEASED_RIGHT)
     {
         return;
@@ -129,20 +131,19 @@ void keyboard_handler(interrupt_registers_struct regs)
         char letter = 0;
         if (shift_pressed)
         {
-            letter = scancode_ascii_shifted[(int)scancode];
+            letter = scancode_ascii_shifted[(uint32)scancode];
         }
         else
         {
-            letter = scancode_ascii[(int)scancode];
+            letter = scancode_ascii[(uint32)scancode];
         }
         // we dont want to change anything other than letters
         if (letter != SPACE_ASCII && !shift_pressed && letter >= ASCII_ABC_START && letter <= ASCII_ABC_END)
         {
             letter += capslock_value_change;
         }
-        char str[2] = {letter, STRING_TERMINATOR};
         append(key_buffer, letter);
-        print(str);
+        print_char(letter);
     }
     
 }
