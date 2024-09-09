@@ -73,7 +73,7 @@ void keyboard_handler(interrupt_registers_struct regs)
 {
     /* The PIC leaves us the scancode in port 0x60 */
     uint8 scancode = port_byte_in(KEYBOARD_DATA_PORT);
-    //if scancode is unknow (above the range of know scancodes) then return 
+    //if scancode is unknown (above the range of known scancodes) then return 
     if (scancode > SCANCODE_MAX && scancode != SHIFT_RELEASED_LEFT && scancode != SHIFT_RELEASED_RIGHT)
     {
         return;
