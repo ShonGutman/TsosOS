@@ -2,10 +2,17 @@
 #include "idt.h"
 #include "pic.h"
 #include "drivers/screen.h"
+#include "libc/string.h"
+
+
 
 void isr_handler(interrupt_registers_struct regs)
 {
-    print("interrupt occured! system hlts");
+    print("received interrupt: ");
+    char s[3];
+    int_to_ascii(regs.int_number, s);
+    print(s);
+    print("\n");
     while(1);
 }
 

@@ -25,4 +25,5 @@ void idt_init()
 
     //load info on idt using lidt assembly instruction (simmilar to how it is done with gdt)
     __asm__ ("lidt (%0)" : : "r"(&idt_info));
+    __asm__("sti");
 }

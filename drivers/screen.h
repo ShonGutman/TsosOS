@@ -17,6 +17,14 @@ void print(const char* string);
  * beginning of the screen.
  */
 void clear_screen();
+/*
+ * Prints a single character to the `VGA` text buffer at the current cursor position and moves curser to new location
+ *
+ * @param c The character to be printed.
+ */
+void print_char(const char c);
+
+void print_backspace();
 
 
 #endif
