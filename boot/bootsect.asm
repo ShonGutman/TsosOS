@@ -8,6 +8,30 @@ KERNEL_OFFSET equ 0x1000 ; We will use the same when linking the kernel
 ; The OS is first launched in real mode (which is 16-bit mode).
 bits 16
 
+;credit: https://wiki.osdev.org/FAT
+jmp short start
+nop
+
+BPB_OEM db 'MSWIN4.1'
+BPB_BYTES_PER_SECTOR dw 512
+BPB_SECTORS_PER_CLUSTER db 1
+BPB_RESERVED_SECTORS dw 1
+BPB_FILE_ALLOCATION_TABLES db 2
+BPB_ROOT_DIR_ENTIRES dw 0x00e0
+BPB_TOTAL_SECTORS dw 2880
+BPB_MEDIA_DESCRIPTOR_TYPE db 0xf0
+BPB_SECTORS_PER_FAT dw 9
+BPB_SECTORS_PER_TRACK dw 18
+BPB_HEADS dw 2
+BPB_HIDDEN_SECOTRS dd 0
+BPB_LARGE_SECTOR_COUNT dd 0
+EBPB_DRIVER_NUMBER db 0
+EBPB_RESERVED db 0
+EBPB_SIGNATURE db 0x29
+EBPB_VOLUME_ID dd 0x12345678
+EBPB_VOLUME_LABLE db 'TSOS OS    ' ; 11 chars
+EBPB_SYSTEM_ID db 'FAT12   ' ; 8 chars
+
 ; Infinite loop
 start:
 
@@ -69,7 +93,7 @@ BEGIN_PM:
 BOOT_DRIVE db 0 ; It is a good idea to store it in memory because 'dl' may get overwritten
 MSG_REAL_MODE db "Started in 16-bit Real Mode", 0
 MSG_PROTECTED_MODE db "Landed in 32-bit Protected Mode", 0
-MSG_LOAD_KERNEL db "Loading kernel into memory", 0
+MSG_LOAD_KERNEL db "Loading kernel", 0
 
 ; Fill the rest of the sector with zeros (510 bytes total)
 times 510-($-$$) db 0
