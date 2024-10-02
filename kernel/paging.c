@@ -33,4 +33,30 @@ void init_paging()
     page_directory[0].rw = 1;      // Read/Write enabled
     page_directory[0].user = 0;    // Supervisor level
     page_directory[0].table_address = ((unsigned int)first_page_table) >> 12;
+
+    loadPageDirectory(page_directory);
+    enablePaging();
+}
+
+// Function to load the page directory address into CR3
+static void loadPageDirectory(PageDirectoryEntry* page_directory) 
+{
+    asm volatile (
+        "mov %0, %%cr3"
+        : // No output operands
+        : "r" (page_directory) // Input operand, 'r' means any general-purpose register
+    );
+}
+
+// Function to enable paging by setting the paging bit (31st bit) in CR0
+static void enablePaging() 
+{
+    asm volatile (
+        "mov %%cr0, %%eax\n"
+        "or $0x80000000, %%eax\n"
+        "mov %%eax, %%cr0"
+        : // No output operands
+        : // No input operands
+        : "eax" // Clobbered registers
+    );
 }
