@@ -29,16 +29,20 @@ CFLAGS = -m32 -g -ffreestanding -fno-pie -fno-pic -I.
 all: run
 
 
-os-image.bin: boot/bootsect.bin kernel.bin
-	cat $^ > os-image.bin
+os-image.bin: kernel.bin
+	mkdir -p isodir/boot/grub
+	cp kernel.bin isodir/boot/
+	cp grub.cfg isodir/boot/grub/
+	grub-mkrescue -o $@ isodir
+
 
 # '--oformat binary' deletes all symbols as a collateral, so we don't need
 # to 'strip' them manually on this case
-kernel.bin: boot/kernel_entry.o ${OBJ}
+kernel.bin: boot/bootsect.o ${OBJ}
 	${LD} ${LD_FLAGS} -o $@ -T linker.ld $^ --oformat binary
 
 # Used for debugging purposes
-kernel.elf: boot/kernel_entry.o ${OBJ}
+kernel.elf: boot/bootsect.o ${OBJ}
 	${LD} ${LD_FLAGS} -o $@ -Ttext 0x1000 $^ 
 
 run: os-image.bin
