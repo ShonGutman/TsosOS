@@ -66,6 +66,8 @@ void init_timer()
     const uint8 high = (divisor >> 8) & 0xff;
     port_byte_out(CHANNEL0_PORT, low);
     port_byte_out(CHANNEL0_PORT, high);
+
+    print("Done!\n"); // Does not trigger
 }
 
 
@@ -76,4 +78,5 @@ void init_timer()
 void timer_handler(interrupt_registers_struct regs)
 {
     ticks++;
+    print("Ticked\n");
 }
