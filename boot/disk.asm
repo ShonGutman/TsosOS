@@ -22,6 +22,7 @@ disk_read:
     pop ax              ; AL = number of sectors to read
 
     mov ah, 0x02        ; Set ah to BIOS read function (int 13h, function 02h)
+    stc              ; Set Carry flag (some BIOS don't do that)
 
     ; [es:bx] <- pointer to buffer where the data will be stored
     ; caller sets it up for us, and it is actually the standard location for int 13h
