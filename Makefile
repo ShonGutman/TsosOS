@@ -36,7 +36,7 @@ os-image.bin: boot/bootsect.bin kernel.bin
 
 # '--oformat binary' deletes all symbols as a collateral, so we don't need
 # to 'strip' them manually on this case
-kernel.bin: boot/bootsect.o ${OBJ}
+kernel.bin: boot/kernel_entry.o ${OBJ}
 	${LD} ${LD_FLAGS} -T linker.ld -o $@  $^
 
 # Used for debugging purposes

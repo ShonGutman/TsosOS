@@ -204,7 +204,6 @@ BEGIN_PM:
 
 data_lba: dw 0
 kernel_cluster: dw 0
-
 LOADING_KERNEL db "Loading Kernel", ENDL, 0
 KERNEL_NOT_FOUND db "kernel not found", ENDL, 0
 KERNEL_NAME db "KERNEL  BIN"
