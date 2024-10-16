@@ -1,3 +1,4 @@
+bits 16
 
 ;-----------------------------------------------------------------------
 ; Function: disk_read
@@ -31,11 +32,6 @@ disk_read:
     popa
     ret
 
-disk_error:
-    mov si, DISK_ERROR
-    call print
-    cli             ;diable interrupts, this way CPU cant get out of halt state
-    hlt
 
 
 ;-----------------------------------------------------------------------
@@ -50,7 +46,6 @@ disk_error:
 ;   cx [bits 6-15]: cylinder number
 ;   dh: head number
 ;-----------------------------------------------------------------------
-
 lba_to_chs:
 
     push ax
@@ -75,6 +70,12 @@ lba_to_chs:
 
     pop ax
     ret
+
+disk_error:
+    mov si, DISK_ERROR
+    call print
+    cli             ;diable interrupts, this way CPU cant get out of halt state
+    hlt
 
 
 

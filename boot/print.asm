@@ -9,6 +9,8 @@
 ;   None
 ;-----------------------------------------------------------------------
 
+
+bits 16
 print:
     pusha                ; Save all registers onto the stack
 
