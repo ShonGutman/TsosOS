@@ -22,7 +22,7 @@ disk_read:
     pop ax              ; AL = number of sectors to read
 
     mov ah, 0x02        ; Set ah to BIOS read function (int 13h, function 02h)
-    stc              ; Set Carry flag (some BIOS don't do that)
+    stc                 ; Set Carry flag (some BIOS don't do that)
 
     ; [es:bx] <- pointer to buffer where the data will be stored
     ; caller sets it up for us, and it is actually the standard location for int 13h
@@ -50,6 +50,7 @@ disk_read:
 lba_to_chs:
 
     push ax
+    push dx
 
 ;   sector number = (LBA % SECTORS_PER_TRACK) + 1
 ;   head number = (LBA / SECTORS_PER_TRACK) % HEADS
@@ -70,13 +71,14 @@ lba_to_chs:
     or cl, ah
 
     pop ax
+    mov dl, al
+    pop ax
     ret
 
 disk_error:
     mov si, DISK_ERROR
     call print
-    cli             ;diable interrupts, this way CPU cant get out of halt state
-    hlt
+    jmp halt             
 
 
 
