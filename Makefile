@@ -30,7 +30,10 @@ all: run
 
 
 os-image.bin: boot/bootsect.bin kernel.bin
-	cat $^ > os-image.bin
+	dd if=/dev/zero of=os-image.bin bs=512 count=2880
+	mkfs.fat -F 12 -n "TSOS" os-image.bin
+	dd if=boot/bootsect.bin of=os-image.bin conv=notrunc
+	mcopy -i os-image.bin kernel.bin "::kernel.bin"
 
 # '--oformat binary' deletes all symbols as a collateral, so we don't need
 # to 'strip' them manually on this case
@@ -49,6 +52,9 @@ debug: os-image.bin kernel.elf
 	${QEMU} ${QEMU_DEBUG_FLAGS} os-image.bin &
 	${GDB} -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
 
+bochs: os-image.bin
+	bochs -f bochs_config
+
 # Generic rules for wildcards
 # To make an object, always compile from its .c
 %.o: %.c ${HEADERS}
@@ -61,9 +67,9 @@ debug: os-image.bin kernel.elf
 	${NASM} $< ${NASM_FLAGS_BIN} -o $@
 
 clean:
-	rm -rf *.bin *.dis *.o os-image.bin boot/bootsect.bin *.elf
+	rm -rf *.bin *.dis *.o *.ini os-image.bin boot/bootsect.bin *.elf
 
 	find -name '*.o' -type f -delete
 	
 # Phony targets
-.PHONY: all run debug clean
+.PHONY: all run debug bochs clean
