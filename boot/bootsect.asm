@@ -194,9 +194,9 @@ read_finish:
 bits 32
 BEGIN_PM:
     call 0x9c00; Give control to the kernel
-    
-    jmp $ ; Stay here when the Kernel returns control to us (it should never happen)
-  
+
+    jmp $ ; Stay here when the kernel returns control to us (it should never happen)
+
 %include "boot/print.asm"
 %include "boot/disk.asm"
 %include "boot/gdt.asm"
@@ -204,6 +204,7 @@ BEGIN_PM:
 
 data_lba: dw 0
 kernel_cluster: dw 0
+
 LOADING_KERNEL db "Loading Kernel", ENDL, 0
 KERNEL_NOT_FOUND db "kernel not found", ENDL, 0
 KERNEL_NAME db "KERNEL  BIN"
