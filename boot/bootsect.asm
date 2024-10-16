@@ -7,7 +7,7 @@ org 0x7C00
 bits 16
 
 KERNEL_OFFSET equ 0x2000
-KERNEL_SEGMENT equ 0
+KERNEL_SEGMENT equ 0x07c0
 %define ENDL 0x0d, 0x0a
 
 ;credit: https://wiki.osdev.org/FAT
@@ -193,7 +193,7 @@ read_finish:
 
 bits 32
 BEGIN_PM:
-    call KERNEL_SEGMENT:KERNEL_OFFSET ; Give control to the kernel
+    call 0x9c00; Give control to the kernel
 
     jmp $ ; Stay here when the kernel returns control to us (it should never happen)
 

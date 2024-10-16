@@ -42,7 +42,7 @@ kernel.bin: boot/kernel_entry.o ${OBJ}
 
 # Used for debugging purposes
 kernel.elf: boot/kernel_entry.o ${OBJ}
-	${LD} ${LD_FLAGS} -o $@ -Ttext 0x1000 $^ 
+	${LD} ${LD_FLAGS} -o $@ -Ttext 0x9c00 $^ 
 
 run: os-image.bin
 	${QEMU} ${QEMU_FLAGS} os-image.bin

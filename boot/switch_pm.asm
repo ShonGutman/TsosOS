@@ -51,7 +51,7 @@ init_pm: ; we are now using 32-bit instructions
     mov gs, ax
 
     ; Set up a new stack
-    mov ebp, 0x90000 ; Stack base pointer at 0x90000
+    mov ebp, 0x7c00  ; Stack base pointer at 0x7c00
     mov esp, ebp     ; Stack pointer at the same address (empty stack)
 
     call BEGIN_PM ; Jump to the main protected mode code
