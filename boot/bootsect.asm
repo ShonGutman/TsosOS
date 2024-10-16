@@ -194,9 +194,9 @@ read_finish:
 bits 32
 BEGIN_PM:
     call 0x9c00; Give control to the kernel
-
-    jmp $ ; Stay here when the kernel returns control to us (it should never happen)
-
+    
+    jmp $ ; Stay here when the Kernel returns control to us (it should never happen)
+  
 %include "boot/print.asm"
 %include "boot/disk.asm"
 %include "boot/gdt.asm"

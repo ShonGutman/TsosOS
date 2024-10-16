@@ -19,8 +19,7 @@ NASM = nasm
 NASM_FLAGS_BIN = -f bin
 NASM_FLAGS_ELF = -f elf
 QEMU = qemu-system-i386
-QEMU_FLAGS = -fda
-QEMU_DEBUG_FLAGS = -s -S -fda
+QEMU_DEBUG_FLAGS = -s -S
 
 # -g: Use debugging symbols in gcc
 CFLAGS = -m32 -g -ffreestanding -fno-pie -fno-pic -I.
@@ -37,15 +36,15 @@ os-image.bin: boot/bootsect.bin kernel.bin
 
 # '--oformat binary' deletes all symbols as a collateral, so we don't need
 # to 'strip' them manually on this case
-kernel.bin: boot/kernel_entry.o ${OBJ}
-	${LD} ${LD_FLAGS} -o $@ -T linker.ld $^ --oformat binary
+kernel.bin: boot/bootsect.o ${OBJ}
+	${LD} ${LD_FLAGS} -T linker.ld -o $@  $^
 
 # Used for debugging purposes
 kernel.elf: boot/kernel_entry.o ${OBJ}
 	${LD} ${LD_FLAGS} -o $@ -Ttext 0x9c00 $^ 
 
 run: os-image.bin
-	${QEMU} ${QEMU_FLAGS} os-image.bin
+	${QEMU} os-image.bin
 
 # Open the connection to qemu and load our kernel-object file with symbols
 debug: os-image.bin kernel.elf
