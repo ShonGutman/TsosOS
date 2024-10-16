@@ -3,7 +3,7 @@ ENTRY(start)
 SECTIONS
 {
     /* Align at a 4KB page boundary */
-    . = 0x100000;
+    . = 0x9C00;
     
     /* Text (code) section */
     .text :

@@ -12,11 +12,9 @@ void main()
     clear_screen();
 
     print(osName);
-    //init_timer();
+    init_timer();
+    init_keyboard();
 
-    print("Test\n");
-
-    while(1);
 }
 
 

@@ -1,62 +1,85 @@
+bits 16
 
 ;-----------------------------------------------------------------------
-; Function: disk_load
-; Purpose:  Load 'dh' sectors from drive 'dl' into ES:BX.
+; Function: disk_read
+; Purpose:  read sectors from disk
 ;
 ; Parameters:
-;   dh - number of sectors to read
+;   ax - LBA address
+;   cl - number of sectors to read (up to 128)
 ;   dl - driver number to read data from
 ;   es:bx - the address of the data to store in the loaded data
 ;
 ; Return:
 ;   None
 ;-----------------------------------------------------------------------
-disk_load:
+disk_read:
 
     pusha
-    ; reading from disk requires setting specific values in all registers
-    ; so we will overwrite our input parameters from 'dx'. Let's save it
-    ; to the stack for later use.
-    push dx
 
-    mov ah, 0x02 ; Set ah to BIOS read function (int 13h, function 02h)
-    mov al, dh   ; al <- number of sectors to read (0x01 .. 0x80)
-    mov cl, 0x02 ; cl <- Sector number to start reading from (0x01 .. 0x11)
-                 ; 0x01 is our boot sector, 0x02 is the first 'available' sector
-    
-    mov ch, 0x00 ; ch <- Cylinder number  (0x0 .. 0x3FF)
+    push cx             ; temporarily save CL (number of sectors to read)
+    call lba_to_chs
+    pop ax              ; AL = number of sectors to read
 
-    ; dl <- drive number. Our caller sets it as a parameter and gets it from BIOS
-    ; (0 = floppy, 1 = floppy2, 0x80 = hdd, 0x81 = hdd2)
-    
-    mov dh, 0x00 ; dh <- head number (0x0 .. 0xF)
+    mov ah, 0x02        ; Set ah to BIOS read function (int 13h, function 02h)
+    stc                 ; Set Carry flag (some BIOS don't do that)
 
     ; [es:bx] <- pointer to buffer where the data will be stored
     ; caller sets it up for us, and it is actually the standard location for int 13h
     int 0x13      ; BIOS interrupt
-    jc disk_error ; if error (stored in the carry bit)
 
-    pop dx
-    cmp al, dh    ; BIOS also sets 'al' to the # of sectors read. Compare it.
-    jne sectors_error
+    jc disk_error       ; if error (stored in the carry bit)
+
     popa
     ret
 
 
+
+;-----------------------------------------------------------------------
+; Function: lba_to_chs
+; Purpose:  convert LBA address format into CHS address format
+;
+; Parameters:
+;   ax - LBA address
+;
+; Return:
+;   cx [bits 0-5]: sector number
+;   cx [bits 6-15]: cylinder number
+;   dh: head number
+;-----------------------------------------------------------------------
+lba_to_chs:
+
+    push ax
+    push dx
+
+;   sector number = (LBA % SECTORS_PER_TRACK) + 1
+;   head number = (LBA / SECTORS_PER_TRACK) % HEADS
+;   cylinder number = (LBA / SECTORS_PER_TRACK) / HEADS
+
+    xor dx, dx                          ; dx = 0
+    div word [BPB_SECTORS_PER_TRACK]    ; ax = LBA / SECTORS_PER_TRACK
+                                        ; dx = LBA % SECTORS_PER_TRACK
+    inc dx                              ; dx = (LBA % SECTORS_PER_TRACK) + 1 = sector number
+    mov cx, dx                          ; cx = sector
+
+    xor dx, dx
+    div word [BPB_HEADS]                ; ax = (LBA / SECTORS_PER_TRACK) / HEADS = cylinder number
+                                        ; dx = (LBA / SECTORS_PER_TRACK) % HEADS = head number
+    mov dh, dl
+    mov ch, al
+    shl ah, 6
+    or cl, ah
+
+    pop ax
+    mov dl, al
+    pop ax
+    ret
+
 disk_error:
     mov si, DISK_ERROR
     call print
-    call print_nl
-    mov dh, ah ; ah = error code, dl = disk drive that dropped the error
-    call print_hex
-    jmp disk_loop
+    jmp halt             
 
-sectors_error:
-    mov si, SECTORS_ERROR
-    call print
 
-disk_loop:
-    jmp $
 
-DISK_ERROR: db "Disk read error", 0
-SECTORS_ERROR: db "Incorrect number of sectors read", 0
+DISK_ERROR: db "Disk read error", ENDL, 0
