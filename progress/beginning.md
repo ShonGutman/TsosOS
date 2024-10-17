@@ -31,8 +31,10 @@ LD: The linker that combines object files into a final executable or binary.
 
 GDB: The debugger for analyzing and debugging the OS at runtime.
 
+BOCHS: Graphical debugger for Assembly code for analyzing the assembly code (bootSector and Kenrel) at runtime.
+
 **Installation Command:**
-	`sudo apt install make nasm qemu-system-x86 gcc gdb binutils`
+	`sudo apt install make nasm qemu-system-x86 gcc gdb binutils bochs-x bochsbios vgabios`
 
 Tools Overview:
 ---------------
@@ -48,4 +50,16 @@ GCC: A powerful compiler system supporting various programming languages. In thi
 LD: A linker that combines multiple object files (.o) into a single executable or binary file. It is crucial for creating the final bootable image of the OS.
 
 GDB: A debugger that allows you to inspect the inner workings of your program while it runs. You can set breakpoints, step through code, and examine memory, making it invaluable for diagnosing issues in your OS.
+
+BOCHS: Another debbuger which has GUI and allows to inspect assembly code at runtime. It is possible to set breakpoints, examine memory and registers which is invaluable for finding bugs at the assembly level.
+
+**Debugging with bochs**
+
+* navigate to View - Disassemble (or press Ctrl+D) and type `0x7C00` and press OK on both prompts.
+* double click on the first instruction to set a breakpoint. The line should turn red.
+* press Continue.
+* if everything goes right, you will end up at address `0x7C00`. If the code looks different than `bootsect.asm`, run the Disassemble command again.
+* run step by step to see your code in action. If the code looks like garbage, you probably need to Disassemble again.
+* to avoid debugging through BIOS code (you see addresses starting with many FFFFs), set a breakpoint after the `int` call, and then press Continue.
+* to view code of kernel navigate to View - Physical MemDump and enter the offset of kernel.
 
