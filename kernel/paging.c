@@ -2,14 +2,25 @@
 #define PAGE_TABLE_ENTRIES 1024
 #define PAGE_DIRECTORY_ENTRIES 1024
 
+#define FRAME_SIZE 0x1000 // 4 KB
+#define TOTAL_MEMORY_SIZE (1024 * 1024 * 32) // Example: 32 MB of RAM
+#define TOTAL_FRAMES (TOTAL_MEMORY_SIZE / FRAME_SIZE)
+
+// Bitmap to track frame usage
+uint8 frame_bytemap[TOTAL_FRAMES]; // Each byte represents a frame
+
+
 // make sure that both the page tables and the directory are 4 kb alligned
 PageDirectoryEntry page_directory[PAGE_DIRECTORY_ENTRIES] __attribute__((aligned(4096)));
 PageTableEntry first_page_table[PAGE_TABLE_ENTRIES] __attribute__((aligned(4096)));
 static void loadPageDirectory(PageDirectoryEntry* page_directory);
 static void enablePaging();
+uint32 allocate_frame();
+void init_frame_bytemap();
 
 void init_paging()
 {
+    init_frame_bytemap();   
     uint16 i = 0;
     for (i = 0; i < PAGE_DIRECTORY_ENTRIES; i++) 
     {
@@ -25,7 +36,7 @@ void init_paging()
         first_page_table[i].present = 1;   // Page is present
         first_page_table[i].rw = 1;        // Read/Write enabled
         first_page_table[i].user = 0;      // Supervisor level
-        first_page_table[i].frame_address = i; // Physical address is i * 0x1000
+        first_page_table[i].frame_address = allocate_frame(); // Physical address is i * 0x1000
     }
 
     // Setting the first page directory entry to point to the first page table
@@ -59,4 +70,30 @@ static void enablePaging()
         : // No input operands
         : "eax" // Clobbered registers
     );
+}
+
+//set all frames to free
+void init_frame_bytemap() 
+{
+    uint32 i = 0;
+    for (; i < TOTAL_FRAMES; i++)
+    {
+        frame_bytemap[i] = 0;
+    }
+    
+}
+
+
+uint32 allocate_frame() 
+{
+    uint32 i = 0;
+    for (; i < TOTAL_FRAMES; i++) 
+    {
+        if (!frame_bytemap[i]) 
+        {
+            frame_bytemap[i]++; // set it to 1 meaning that the page is set
+            return i;
+        }
+    }
+    return -1; // No free frames available
 }
