@@ -41,22 +41,6 @@ void init_paging()
 
     loadPageDirectory(page_directory);
     enablePaging();
-
-    uint32_t addr = allocate_page(); // Allocate a page
-    if (addr == -1) {
-        // Handle allocation failure
-    }
-
-    char* ptr = (char*) addr; // Cast to char pointer for easy access
-    *ptr = 'T';               // Write to the allocated page
-
-    if (*ptr != 'T') {
-        // Handle test failure
-    }
-
-    unmap_page(addr); // Unmap the page
-
-
 }
 
 // Function to load the page directory address into CR3
