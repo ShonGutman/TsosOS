@@ -44,7 +44,7 @@
 ;
 ;       - Executable: Contain Code? No, thus: 0
 ;       - Direction: segment grows downwords (We dont want that so set to 0)
-;       - Writable: 0 if read only (int our case it is not so set to 1)
+;       - Writable: 0 if read only (in our case it is not so set to 1)
 ;       - Accessed: same as in Code segment
 ;
 ;--------------------------------------------------------------------------

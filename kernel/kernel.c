@@ -1,10 +1,14 @@
 #include "drivers/screen.h"
 #include "cpu/interrupts/isr.h"
 #include "cpu/timer/timer.h"
+#include "cpu/gdt/gdt.h"
 #include "drivers/keyboard.h"
 #include "libc/string.h"
+
+
 void main() 
 {
+    init_gdt();
     isr_install();
 
     //print project name and our name
