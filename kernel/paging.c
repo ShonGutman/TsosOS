@@ -22,6 +22,12 @@ void init_frame_bytemap();
 void map_page(uint32 phys_addr, uint32 virt_addr, uint32 flags);
 void unmap_page(uint32 virt_addr);
 void free_frame(uint32 frame);
+PageDirectoryEntry* create_page_directory();
+void load_process_page_directory(PageDirectoryEntry* page_directory);
+void switch_to_process(PageDirectoryEntry* process_page_directory);
+void setup_process_memory(PageDirectoryEntry* page_directory, uint32 code_size, uint32 stack_size);
+void free_process_memory(PageDirectoryEntry* page_directory);
+uint32 allocate_page(uint32 virt_addr, uint32 flags);
 
 // Initialize paging
 void init_paging() 
@@ -41,6 +47,7 @@ void init_paging()
 
     loadPageDirectory(page_directory);
     enablePaging();
+    
 }
 
 // Function to load the page directory address into CR3
@@ -156,4 +163,20 @@ void unmap_page(uint32 virt_addr)
 
     // Optionally, free the frame if no longer needed
     free_frame(table[table_index].frame_address << 12);
+}
+
+uint32 allocate_page(uint32 virt_addr, uint32 flags) 
+{
+    // Allocate a physical frame
+    uint32 phys_addr = allocate_frame();
+    if (phys_addr == (uint32)-1) 
+    {
+        // No free frame available
+        return (uint32)-1;
+    }
+
+    // Map the physical frame to the given virtual address
+    map_page(phys_addr, virt_addr, flags);
+
+    return virt_addr;
 }

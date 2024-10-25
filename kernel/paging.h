@@ -32,5 +32,5 @@ typedef struct {
 } PageTableEntry;
 
 void init_paging();
-
+uint32 allocate_page(uint32 virt_addr, uint32 flags);
 #endif

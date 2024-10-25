@@ -13,7 +13,6 @@ void main()
     clear_screen();
     init_paging();
     print(osName);
-    
     //asm("int $2");
     init_timer();
     init_keyboard();

@@ -23,7 +23,7 @@ QEMU_FLAGS = -fda
 QEMU_DEBUG_FLAGS = -s -S -fda
 
 # -g: Use debugging symbols in gcc
-CFLAGS = -m32 -g -ffreestanding -fno-pie -fno-pic -I.
+CFLAGS = -m32 -g -ffreestanding -fno-pie -fno-pic -I. -Wno-int-conversion
 
 # Default target
 all: run

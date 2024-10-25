@@ -69,6 +69,8 @@ static char key_buffer[MAX_KEYS];
 static uint8 capslock_value_change = CAPPED_TO_NORMAL_ASCII;
 static uint8 shift_pressed = 0;
 
+void procces_user_input(const char* input);
+
 void keyboard_handler(interrupt_registers_struct regs) 
 {
     /* The PIC leaves us the scancode in port 0x60 */
