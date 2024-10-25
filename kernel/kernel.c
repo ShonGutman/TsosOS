@@ -5,7 +5,6 @@
 #include "drivers/keyboard/keyboard.h"
 #include "libc/string.h"
 
-
 void main() 
 {
     init_gdt();
