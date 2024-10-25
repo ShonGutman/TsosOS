@@ -19,5 +19,3 @@ void main()
     init_keyboard();
 
 }
-
-
