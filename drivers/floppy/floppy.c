@@ -1,7 +1,7 @@
 #include "floppy.h"
 #include "headers/fat_headers.h"
 
-volatile const fat_header* fat_headers = 0x7c00;
+volatile const fat_header* const fat_headers = 0x7c00;
 
 
 /*
