@@ -1,6 +1,6 @@
 #include "headers/types.h"
-#include "drivers/screen.h"
-#include "drivers/ports.h"
+#include "drivers/screen/screen.h"
+#include "drivers/ports/ports.h"
 #include "cpu/interrupts/irq.h"
 #include "timer.h"
 

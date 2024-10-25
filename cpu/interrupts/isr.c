@@ -1,7 +1,7 @@
 #include "isr.h"
 #include "idt.h"
 #include "pic.h"
-#include "drivers/screen.h"
+#include "drivers/screen/screen.h"
 #include "libc/string.h"
 
 

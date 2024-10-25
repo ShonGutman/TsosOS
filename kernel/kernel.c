@@ -1,8 +1,8 @@
-#include "drivers/screen.h"
+#include "drivers/screen/screen.h"
 #include "cpu/interrupts/isr.h"
 #include "cpu/timer/timer.h"
 #include "cpu/gdt/gdt.h"
-#include "drivers/keyboard.h"
+#include "drivers/keyboard/keyboard.h"
 #include "libc/string.h"
 
 

@@ -2,7 +2,7 @@
 #define PIC_H
 
 #include "headers/types.h"
-#include "drivers/ports.h"
+#include "drivers/ports/ports.h"
 
 /**
  * Source: https://wiki.osdev.org/8259_PIC#Programming_the_PIC_chips

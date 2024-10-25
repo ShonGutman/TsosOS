@@ -1,5 +1,5 @@
 #include "irq.h"
-#include "drivers/ports.h"
+#include "drivers/ports/ports.h"
 
 #define TOTAL_IRQ 16
 
