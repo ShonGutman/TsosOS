@@ -11,6 +11,10 @@ typedef unsigned char uint8;
 typedef unsigned short uint16;
 typedef unsigned int uint32;
 
+// Helper Macros
+#define LOW_BYTE(x)           ((uint8)((x) & 0xFF))
+#define HIGH_BYTE(x)          ((uint8)(((x) >> 8) & 0xFF))
+
 typedef struct
 {
     uint32 ds;
