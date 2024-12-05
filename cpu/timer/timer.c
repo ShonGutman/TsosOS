@@ -62,8 +62,8 @@ void init_timer()
     port_byte_out(MODE_COMMAND_REGISTER, 0b00110110);
 
     const uint32 divisor = TIMER_FREQUENCY_HZ / FREQUENCY;
-    const uint8 low = divisor & 0xff;
-    const uint8 high = (divisor >> 8) & 0xff;
+    const uint8 low = LOW_BYTE(divisor);
+    const uint8 high = HIGH_BYTE(divisor);
     port_byte_out(CHANNEL0_PORT, low);
     port_byte_out(CHANNEL0_PORT, high);
 }
