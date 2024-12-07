@@ -1,16 +1,14 @@
-#include "headers/types.h"
-#include "drivers/screen/screen.h"
 #include "drivers/ports/ports.h"
 #include "cpu/interrupts/irq.h"
 #include "timer.h"
 
-#define FREQUENCY 100
+#define FREQUENCY 1000 // 1 ms
 #define TIMER_FREQUENCY_HZ 1193182
 
 #define MODE_COMMAND_REGISTER 0x43
 #define CHANNEL0_PORT 0x40
 
-uint32 ticks = 0;
+static uint32 ticks = 0;
 
 /**********************************************************
  * Private kernel functions signiture                     *
@@ -68,6 +66,16 @@ void init_timer()
     port_byte_out(CHANNEL0_PORT, high);
 }
 
+void sleep(const uint32 ms)
+{
+    uint32 current = ticks;
+    while (ticks < current + ms) {}
+}
+
+uint32 get_system_clock()
+{
+    return ticks;
+}
 
 /**********************************************************
  * Private kernel functions                               *
